@@ -87,6 +87,7 @@ jobs:
         include:
         - os: ubuntu-20.04
           dist-args: --artifacts=global
+          target: ''
           install-dist: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/cargo-dist/releases/download/v0.0.4/cargo-dist-v0.0.4-installer.sh | sh
         - os: macos-11
           dist-args: --artifacts=local --target=aarch64-apple-darwin --target=x86_64-apple-darwin
@@ -94,12 +95,15 @@ jobs:
           install-dist: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/cargo-dist/releases/download/v0.0.4/cargo-dist-v0.0.4-installer.sh | sh
         - os: ubuntu-20.04
           dist-args: --artifacts=local --target=x86_64-unknown-linux-gnu
+          target: 'x86_64-unknown-linux-gnu'
           install-dist: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/cargo-dist/releases/download/v0.0.4/cargo-dist-v0.0.4-installer.sh | sh
         - os: ubuntu-20.04
           dist-args: --artifacts=local --target=aarch64-unknown-linux-gnu
+          target: 'aarch64-unknown-linux-gnu'
           install-dist: curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/cargo-dist/releases/download/v0.0.4/cargo-dist-v0.0.4-installer.sh | sh  
         - os: windows-2019
           dist-args: --artifacts=local --target=x86_64-pc-windows-msvc
+          target: 'x86_64-pc-windows-msvc'
           install-dist: irm  https://github.com/axodotdev/cargo-dist/releases/download/v0.0.4/cargo-dist-v0.0.4-installer.ps1 | iex
 
     runs-on: ${{ matrix.os }}
@@ -112,6 +116,7 @@ jobs:
       - name: Install cargo-dist
         run: ${{ matrix.install-dist }}
       - name: Run cargo-dist
+        if: ${{ matrix.target != '' }}
         # This logic is a bit janky because it's trying to be a polyglot between
         # powershell and bash since this will run on windows, macos, and linux!
         # The two platforms don't agree on how to talk about env vars but they
