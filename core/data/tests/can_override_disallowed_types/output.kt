@@ -9,3 +9,4 @@ data class DisallowedType (
 	val another_disallowed_type: Long,
 	val disallowed_type_serde_with: ULong
 )
+

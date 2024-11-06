@@ -80,12 +80,8 @@ impl Language for TypeScript {
             SpecialRustType::U64
             | SpecialRustType::I64
             | SpecialRustType::ISize
-            | SpecialRustType::USize => {
-                panic!(
-                    "64 bit integer types require an explicit output type. \
-                    See: https://1password.github.io/typeshare/usage/annotations.html#special-note-on-64-bit-integer-types for more information."
-                )
-            }
+            | SpecialRustType::U128
+            | SpecialRustType::USize => Ok("number".into())
         }
     }
 
@@ -181,8 +177,9 @@ impl Language for TypeScript {
         w: &mut dyn Write,
         imports: ScopedCrateTypes<'_>,
     ) -> std::io::Result<()> {
+        writeln!(w, "import type {{ HashSet }} from \"./base\";")?;
         for (path, ty) in imports {
-            write!(w, "import {{ ")?;
+            write!(w, "import type {{ ")?;
             let ty_list = ty.iter().join(", ");
             write!(w, "{ty_list}")?;
             writeln!(w, " }} from \"./{path}\";")?;

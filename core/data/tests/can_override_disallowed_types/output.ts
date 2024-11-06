@@ -3,3 +3,4 @@ export interface DisallowedType {
 	another_disallowed_type: number;
 	disallowed_type_serde_with: string;
 }
+
